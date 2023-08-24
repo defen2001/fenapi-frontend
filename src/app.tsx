@@ -15,24 +15,24 @@ const loginPath = '/user/login';
  * */
 export async function getInitialState(): Promise<InitialState> {
   // 当页面首次加载时，获取要全局保存的数据，比如用户登录信息
-  const state :InitialState = {
+  const state: InitialState = {
     loginUser: undefined,
   }
-    try {
-      const res = await getLoginUserUsingGET();
-      if (res.data){
-        state.loginUser = res.data;
-      }
-    } catch (error) {
-      history.push(loginPath);
+  try {
+    const res = await getLoginUserUsingGET();
+    if (res.data) {
+      state.loginUser = res.data;
     }
-  // 如果不是登录页面，执行
+  } catch (error) {
+    history.push(loginPath);
+  }
   return state;
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
+    layout: "top",
     rightContentRender: () => <RightContent />,
     waterMarkProps: {
       content: initialState?.loginUser?.userName,
@@ -77,22 +77,24 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态
-    childrenRender: (children) => {
+    childrenRender: (children, props) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
         <>
           {children}
-          <SettingDrawer
-            disableUrlParams
-            enableDarkTheme
-            settings={initialState?.settings}
-            onSettingChange={(settings) => {
-              setInitialState((preInitialState) => ({
-                ...preInitialState,
-                settings,
-              }));
-            }}
-          />
+          {!props.location?.pathname?.includes('/login') && (
+            <SettingDrawer
+              disableUrlParams
+              enableDarkTheme
+              settings={initialState?.settings}
+              onSettingChange={(settings) => {
+                setInitialState((preInitialState) => ({
+                  ...preInitialState,
+                  settings,
+                }));
+              }}
+            />
+          )}
         </>
       );
     },
@@ -106,4 +108,3 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
  * @doc https://umijs.org/docs/max/request#配置
  */
 export const request = requestConfig;
-;

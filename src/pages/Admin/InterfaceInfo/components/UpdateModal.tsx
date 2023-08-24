@@ -1,6 +1,8 @@
-import {ProColumns, ProFormInstance, ProTable} from '@ant-design/pro-components';
+import type {ProColumns, ProFormInstance} from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
+import '@umijs/max';
 import { Modal } from 'antd';
-import React, {useEffect, useRef} from 'react';
+import React, {createRef, useEffect, useRef} from 'react';
 
 export type Props = {
   values: API.InterfaceInfo;
@@ -16,10 +18,11 @@ const UpdateModal: React.FC<Props> = (props) => {
   const formRef = useRef<ProFormInstance>();
 
   useEffect(() => {
-    if (formRef){
-      formRef.current?.setFieldsValue(values)
+    if (formRef) {
+      formRef.current?.setFieldsValue(values);
     }
   }, [values])
+
   return (
     <Modal visible={visible} footer={null} onCancel={() => onCancel?.()}>
       <ProTable

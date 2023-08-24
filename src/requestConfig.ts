@@ -17,7 +17,6 @@ interface ResponseStructure {
 export const requestConfig: RequestConfig = {
   baseURL: "http://localhost:8080",
   withCredentials: true,
-
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
@@ -26,14 +25,13 @@ export const requestConfig: RequestConfig = {
       return { ...config, url };
     },
   ],
-
   // 响应拦截器
   responseInterceptors: [
     (response) => {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
-      console.log('data',data);
-      if (data.code !== 0){
+      console.log('data', data);
+      if (data.code !== 0) {
         throw new Error(data.message);
       }
       return response;
