@@ -34,10 +34,12 @@ const Login: React.FC = () => {
       if (res.data) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
-        // 登录成功后处理
-        const urlParams = new URL(window.location.href).searchParams;
-        // 重定向到 redirect 参数所在的位置
-        history.push(urlParams.get('redirect') || '/');
+        setTimeout(()=>{
+          // 登录成功后处理
+          const urlParams = new URL(window.location.href).searchParams;
+          // 重定向到 redirect 参数所在的位置
+          history.push(urlParams.get('redirect') || '/');
+        },100);
         // 保存登录状态
         setInitialState({
           loginUser: res.data,
