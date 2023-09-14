@@ -6,43 +6,41 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginFormPage, ProFormText } from '@ant-design/pro-components';
 import { message, Space, Tabs } from 'antd';
 import React, { useState } from 'react';
-import pandaBackImg from '../../../../public/background.jpg';
+import fenBackImg from '../../../../public/background.jpg';
 
 const Register: React.FC = () => {
+  //todo 验证码注册
   const [captchaSrc, setCaptchaSrc] = useState('/api/captcha');
   const [type, setType] = useState<string>('account');
 
   const handleSubmit = async (values: API.UserRegisterRequest) => {
     // Validate password confirmation
     if (values.userPassword !== values.checkPassword) {
-      message.error('密码和确认密码不匹配！');
+      message.error('两次输入德密码不一致');
       return;
     }
 
     // TODO: Call registration API
 
-    try {
-      // 注册
-      const id = await userRegisterUsingPOST(values);
-      if (id) {
-        const defaultLoginSuccessMessage = '注册成功！';
-        message.success(defaultLoginSuccessMessage);
+    // 注册
+    const res = await userRegisterUsingPOST(values);
+    if (res.code === 0) {
+      const defaultLoginSuccessMessage = '注册成功！';
+      message.success(defaultLoginSuccessMessage);
 
-        /** 此方法会跳转到 redirect 参数所在的位置 */
-        // const urlParams = new URL(window.location.href).searchParams;
-        // history.push(urlParams.get('redirect') || '/');
-        // return;
-        if (!history) return;
-        const { query } = history.location;
-        history.push({
-          pathname: '/user/login',
-          query,
-        });
-        return;
-      }
-    } catch (error: any) {
-      const defaultLoginFailureMessage = '注册失败，请重试！';
-      message.error(defaultLoginFailureMessage);
+      /** 此方法会跳转到 redirect 参数所在的位置 */
+      // const urlParams = new URL(window.location.href).searchParams;
+      // history.push(urlParams.get('redirect') || '/');
+      // return;
+      if (!history) return;
+      const { query } = history.location;
+      history.push({
+        pathname: '/user/login',
+        query,
+      });
+      return;
+    } else {
+      message.error(res.message);
     }
   };
 
@@ -152,7 +150,7 @@ const Register: React.FC = () => {
               submitText: '注册',
             },
           }}
-          backgroundImageUrl={pandaBackImg}
+          backgroundImageUrl={fenBackImg}
           logo={<img alt="logo" src="/logo.png" />}
           title="Fen接口平台"
           subTitle={'API 开放平台'}

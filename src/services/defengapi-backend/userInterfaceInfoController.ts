@@ -32,13 +32,13 @@ export async function deleteUserInterfaceInfoUsingPOST(
   });
 }
 
-/** getUserInterfaceInfoById GET /api/userInterfaceInfo/get */
-export async function getUserInterfaceInfoByIdUsingGET(
+/** getUserInterfaceInfoVOById GET /api/userInterfaceInfo/get/vo */
+export async function getUserInterfaceInfoVOByIdUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.getUserInterfaceInfoByIdUsingGETParams,
+  params: API.getUserInterfaceInfoVOByIdUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseUserInterfaceInfo>('/api/userInterfaceInfo/get', {
+  return request<API.BaseResponseUserInterfaceInfo>('/api/userInterfaceInfo/get/vo', {
     method: 'GET',
     params: {
       ...params,
@@ -47,32 +47,17 @@ export async function getUserInterfaceInfoByIdUsingGET(
   });
 }
 
-/** listUserInterfaceInfo GET /api/userInterfaceInfo/list */
-export async function listUserInterfaceInfoUsingGET(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listUserInterfaceInfoUsingGETParams,
+/** listUserInterfaceInfoVOByPage POST /api/userInterfaceInfo/list/page/vo */
+export async function listUserInterfaceInfoVOByPageUsingPOST(
+  body: API.UserInterfaceInfoQueryRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseListUserInterfaceInfo>('/api/userInterfaceInfo/list', {
-    method: 'GET',
-    params: {
-      ...params,
+  return request<API.BaseResponsePageUserInterfaceInfo>('/api/userInterfaceInfo/list/page/vo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    ...(options || {}),
-  });
-}
-
-/** listUserInterfaceInfoByPage GET /api/userInterfaceInfo/list/page */
-export async function listUserInterfaceInfoByPageUsingGET(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.listUserInterfaceInfoByPageUsingGETParams,
-  options?: { [key: string]: any },
-) {
-  return request<API.BaseResponsePageUserInterfaceInfo>('/api/userInterfaceInfo/list/page', {
-    method: 'GET',
-    params: {
-      ...params,
-    },
+    data: body,
     ...(options || {}),
   });
 }

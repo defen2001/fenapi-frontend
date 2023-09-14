@@ -1,6 +1,13 @@
 export default [
-  { path: '/', name: '主页', icon: 'smile', component: './Index' },
-  { path: '/interface_info/:id', name: '查看接口', icon: 'smile', component: './InterfaceInfo', hideInMenu: true },
+  { name: 'API商店', icon: 'HomeOutlined', path: '/', component: './Index' },
+  { name: '我的接口', icon: 'StarOutlined', path: '/my_interface', component: './MyInterface' },
+  {
+    name: '查看接口',
+    icon: 'smile',
+    path: '/interface_info/:id',
+    component: './InterfaceInfo',
+    hideInMenu: true,
+  },
   {
     path: '/user',
     layout: false,
@@ -16,15 +23,26 @@ export default [
   },
   {
     path: '/admin',
-    name: '管理页',
+    name: '管理中心',
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { name: '接口管理', icon: 'table', path: '/admin/interface_info', component: './Admin/InterfaceInfo' },
-      { name: '接口分析', icon: 'analysis', path: '/admin/interface_analysis', component: './Admin/InterfaceInfoAnalysis' },
+      {
+        name: '接口管理',
+        icon: 'table',
+        path: '/admin/interface_info',
+        component: './Admin/InterfaceInfo',
+      },
+      {
+        name: '统计分析',
+        icon: 'table',
+        path: '/admin/analysis',
+        component: './Admin/InterfaceInfoAnalysis',
+      },
     ],
   },
-
-  // { path: '/', redirect: '/welcome' },
+  { name: '个人中心', icon: 'UserOutlined', path: '/profile', component: './User/Profile' },
+  // {name: '接口管理', icon: 'table', path: '/list', component: './InterfaceInfo'},
+  // {path: '/', redirect: '/welcome'},
   { path: '*', layout: false, component: './404' },
 ];

@@ -5,7 +5,7 @@ import { LoginFormPage, ProFormText } from '@ant-design/pro-components';
 import { history, Link, useModel } from '@umijs/max';
 import { Alert, message, Space, Tabs } from 'antd';
 import React, { useState } from 'react';
-import pandaBackImg from '../../../../public/background.jpg';
+import fenBackImg from '../../../../public/background.jpg';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -27,23 +27,24 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const handleSubmit = async (values: API.UserLoginRequest) => {
-    try {
       // 登录
       const res = await userLoginUsingPOST({
         ...values,
       });
       if (res.data) {
+        const defaultLoginSuccessMessage = '登录成功！';
+        message.success(defaultLoginSuccessMessage);
+        // 登录成功后处理
         const urlParams = new URL(window.location.href).searchParams;
+        // 重定向到 redirect 参数所在的位置
         history.push(urlParams.get('redirect') || '/');
+        // 保存登录状态
         setInitialState({
           loginUser: res.data,
         });
         return;
-      }
-    } catch (error) {
-      const defaultLoginFailureMessage = '登录失败，请重试！';
-      console.log(error);
-      message.error(defaultLoginFailureMessage);
+      } else {
+      message.error(res.message);
     }
   };
   const { status, type: loginType } = userLoginState;
@@ -57,8 +58,8 @@ const Login: React.FC = () => {
         }}
       >
         <LoginFormPage
-          backgroundImageUrl={pandaBackImg}
-          // backgroundImageUrl={<img  alt="pandaBackImg" src="/panda2.jpg"/>}
+          backgroundImageUrl={fenBackImg}
+          // backgroundImageUrl={<img  alt="fenBackImg" src="/panda2.jpg"/>}
           logo={<img alt="logo" src="/logo.png" />}
           title="Fen接口平台"
           subTitle={'API 开放平台'}

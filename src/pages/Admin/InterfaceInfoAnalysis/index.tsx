@@ -1,41 +1,36 @@
+import { listTopInvokeInterfaceInfoUsingGET } from '@/services/defengapi-backend/analysisController';
 import { PageContainer } from '@ant-design/pro-components';
-import '@umijs/max';
-import React, {useEffect, useState} from 'react';
 import ReactECharts from 'echarts-for-react';
-import {listTopInvokeInterfaceInfoUsingGET} from "@/services/defengapi-backend/analysisController";
+import React, { useEffect, useState } from 'react';
 
-/**
- * 接口分析
- * @constructor
- */
 const InterfaceAnalysis: React.FC = () => {
-
   const [data, setData] = useState<API.InterfaceInfoVO[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
-      listTopInvokeInterfaceInfoUsingGET().then(res => {
+      listTopInvokeInterfaceInfoUsingGET().then((res) => {
         if (res.data) {
           setData(res.data);
+          setLoading(false);
         }
-      })
+      });
     } catch (e: any) {
-
+      console.log(e);
     }
-    // todo 从远程获取数据
-  }, [])
+  }, []);
 
-  // 映射：{ value: 1048, name: 'Search Engine' },
-  const chartData = data.map(item => {
+  const chartData = data.map((item) => {
     return {
-      value: item.totalNum,
       name: item.name,
-    }
-  })
+      value: item.totalNum,
+    };
+  });
 
   const option = {
     title: {
-      text: '调用次数最多的接口TOP3',
+      text: '调用次数统计',
+      subtext: 'TOP3',
       left: 'center',
     },
     tooltip: {
@@ -47,7 +42,7 @@ const InterfaceAnalysis: React.FC = () => {
     },
     series: [
       {
-        name: 'Access From',
+        name: '调用次数',
         type: 'pie',
         radius: '50%',
         data: chartData,
@@ -64,8 +59,9 @@ const InterfaceAnalysis: React.FC = () => {
 
   return (
     <PageContainer>
-      <ReactECharts option={option} />
+      <ReactECharts showLoading={loading} option={option} />
     </PageContainer>
   );
 };
+
 export default InterfaceAnalysis;

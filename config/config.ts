@@ -1,9 +1,10 @@
 // https://umijs.org/config/
 import { defineConfig } from '@umijs/max';
+import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
-const { REACT_APP_ENV } = process.env;
+const { REACT_APP_ENV = 'dev' } = process.env;
 export default defineConfig({
   /**
    * @name 开启 hash 模式
@@ -50,7 +51,7 @@ export default defineConfig({
    * @doc 代理介绍 https://umijs.org/docs/guides/proxy
    * @doc 代理配置 https://umijs.org/docs/api/config#proxy
    */
-  proxy: proxy[REACT_APP_ENV || 'dev'],
+  proxy: proxy[REACT_APP_ENV as keyof typeof proxy],
   /**
    * @name 快速热更新配置
    * @description 一个不错的热更新组件，更新时可以保留 state
@@ -72,11 +73,24 @@ export default defineConfig({
    * @name layout 插件
    * @doc https://umijs.org/docs/max/layout-menu
    */
+  title: 'Fen API',
   layout: {
     locale: true,
     ...defaultSettings,
   },
   /**
+   * @name moment2dayjs 插件
+   * @description 将项目中的 moment 替换为 dayjs
+   * @doc https://umijs.org/docs/max/moment2dayjs
+   */
+  moment2dayjs: {
+    preset: 'antd',
+    plugins: ['duration'],
+  },
+  /**
+   * @name 国际化插件
+   * @doc https://umijs.org/docs/max/i18n
+   */ /**
    * @name antd 插件
    * @description 内置了 babel import 插件
    * @doc https://umijs.org/docs/max/antd#antd
@@ -94,6 +108,17 @@ export default defineConfig({
    * @doc https://umijs.org/docs/max/access
    */
   access: {},
+  /**
+   * @name <head> 中额外的 script
+   * @description 配置 <head> 中额外的 script
+   */
+  headScripts: [
+    // 解决首次加载时白屏的问题
+    {
+      src: '/scripts/loading.js',
+      async: true,
+    },
+  ],
   //================ pro 插件配置 =================
   presets: ['umi-presets-pro'],
   /**
@@ -102,6 +127,13 @@ export default defineConfig({
    * @doc https://pro.ant.design/zh-cn/docs/openapi/
    */
   openAPI: [
+    // {
+    //   requestLibPath: "import { request } from '@umijs/max'",
+    //   // 或者使用在线的版本
+    //   // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
+    //   schemaPath: join(__dirname, 'oneapi.json'),
+    //   mock: false,
+    // },
     {
       requestLibPath: "import { request } from '@umijs/max'",
       schemaPath: 'http://localhost:8080/api/v3/api-docs',
@@ -109,6 +141,7 @@ export default defineConfig({
     },
   ],
   mfsu: {
-    exclude: ['@playwright/test'],
+    strategy: 'normal',
   },
+  requestRecord: {},
 });

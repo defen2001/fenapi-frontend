@@ -1,6 +1,7 @@
 import '@umijs/max';
 import { Button, message, notification } from 'antd';
 import defaultSettings from '../config/defaultSettings';
+
 const { pwa } = defaultSettings;
 const isHttps = document.location.protocol === 'https:';
 const clearCache = () => {
@@ -60,7 +61,7 @@ if (pwa) {
       <Button
         type="primary"
         onClick={() => {
-          notification.close(key);
+          notification.destroy(key);
           reloadSW();
         }}
       >
